@@ -1,0 +1,9 @@
+# Requirements for OpenAI Agent SDK integration example
+# Install with: pip install -r examples/requirements_agents.txt
+
+# OpenAI Agent SDK
+openai-agents
+
+# Already included in main project requirements:
+mcp
+fastmcp

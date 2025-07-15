@@ -1,21 +1,47 @@
+#!/usr/bin/env python3
+"""
+Simple test to verify MCP File Server works with basic MCP client.
+Run this to test the server before trying the OpenAI Agent SDK integration.
+"""
+
 import asyncio
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from src.mcp_file_server.main import mcp
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
 
-async def test():
-    tools = await mcp.get_tools()
-    print('Tools type:', type(tools))
-    print('Tool names:', list(tools.keys()))
-    
-    expected_tools = ["read_file", "write_file", "list_directory"]
-    for tool_name in expected_tools:
-        if tool_name in tools:
-            print(f'✅ {tool_name} tool found')
-        else:
-            print(f'❌ {tool_name} tool missing')
-    
-    print(f'✅ FastMCP server has {len(tools)} tools configured correctly!')
 
-asyncio.run(test())
+async def simple_test():
+    """Simple test of MCP File Server functionality."""
+    
+    print("Testing MCP File Server...")
+    
+    server_params = StdioServerParameters(command="mcp-file-server")
+    
+    try:
+        async with stdio_client(server_params) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                
+                # Test basic functionality
+                result = await session.call_tool("write_file", {
+                    "file_path": "simple_test_output.txt",
+                    "content": "Hello from MCP File Server!"
+                })
+                print(f"✅ Write test: {result.content[0].text}")
+                
+                result = await session.call_tool("read_file", {
+                    "file_path": "simple_test_output.txt"
+                })
+                print(f"✅ Read test: {result.content[0].text}")
+                
+                print("✅ MCP File Server is working correctly!")
+                
+    except Exception as e:
+        print(f"❌ Test failed: {e}")
+        return False
+    
+    return True
+
+
+if __name__ == "__main__":
+    success = asyncio.run(simple_test())
+    exit(0 if success else 1)
