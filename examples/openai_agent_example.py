@@ -4,6 +4,23 @@ Example OpenAI Agent SDK integration with MCP File Server.
 
 This script demonstrates how to integrate the MCP File Server with an OpenAI Agent SDK agent,
 allowing the agent to perform file operations through the MCP protocol.
+
+Usage:
+    # Run with uv (recommended):
+    uv run python examples/openai_agent_example.py
+    
+    # Interactive mode with uv:
+    uv run python examples/openai_agent_example.py --interactive
+    
+    # Traditional Python (if uv not available):
+    python examples/openai_agent_example.py
+
+Prerequisites:
+    # Install OpenAI Agent SDK with uv:
+    uv add agents
+    
+    # Or with pip:
+    pip install agents
 """
 
 import asyncio
@@ -19,7 +36,10 @@ async def demo_file_operations():
     # Connect to the MCP File Server
     server = MCPServerStdio(params={
         "command": "mcp-file-server",
-        # Alternative: "command": "python", "args": ["-m", "mcp_file_server.main"]
+        # Alternative with uv (recommended for development):
+        # "command": "uv", "args": ["run", "mcp-file-server"]
+        # Or direct Python execution:
+        # "command": "python", "args": ["-m", "mcp_file_server.main"]
     })
     
     await server.connect()
@@ -93,7 +113,9 @@ async def interactive_agent_mode():
     
     # Connect to the MCP File Server
     server = MCPServerStdio(params={
-        "command": "mcp-file-server"
+        "command": "mcp-file-server",
+        # Alternative with uv (recommended for development):
+        # "command": "uv", "args": ["run", "mcp-file-server"]
     })
     
     await server.connect()

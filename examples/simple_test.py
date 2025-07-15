@@ -2,6 +2,13 @@
 """
 Simple test to verify MCP File Server works with basic MCP client.
 Run this to test the server before trying the OpenAI Agent SDK integration.
+
+Usage:
+    # Run with uv (recommended):
+    uv run python examples/simple_test.py
+    
+    # Traditional Python (if uv not available):
+    python examples/simple_test.py
 """
 
 import asyncio
@@ -14,7 +21,12 @@ async def simple_test():
     
     print("Testing MCP File Server...")
     
-    server_params = StdioServerParameters(command="mcp-file-server")
+    server_params = StdioServerParameters(
+        command="mcp-file-server",
+        # Alternative with uv (recommended for development):
+        # command="uv",
+        # args=["run", "mcp-file-server"]
+    )
     
     try:
         async with stdio_client(server_params) as (read, write):

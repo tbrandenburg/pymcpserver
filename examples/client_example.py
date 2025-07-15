@@ -4,6 +4,16 @@ Example MCP client for testing the MCP File Server.
 
 This script demonstrates how to connect to and interact with the MCP File Server
 using the MCP Python SDK.
+
+Usage:
+    # Run with uv (recommended):
+    uv run python examples/client_example.py
+    
+    # Interactive mode with uv:
+    uv run python examples/client_example.py --interactive
+    
+    # Traditional Python (if uv not available):
+    python examples/client_example.py
 """
 
 import asyncio
@@ -20,7 +30,10 @@ async def test_file_operations():
     # Configure server parameters
     server_params = StdioServerParameters(
         command="mcp-file-server",
-        # Alternatively, you can use direct Python execution:
+        # Alternatively, you can use uv run (recommended for development):
+        # command="uv",
+        # args=["run", "mcp-file-server"]
+        # Or direct Python execution:
         # command="python",
         # args=["-m", "mcp_file_server.main"]
     )
@@ -149,7 +162,12 @@ Features tested:
 async def interactive_mode():
     """Interactive mode for testing the MCP File Server."""
     
-    server_params = StdioServerParameters(command="mcp-file-server")
+    server_params = StdioServerParameters(
+        command="mcp-file-server",
+        # Alternatively, you can use uv run (recommended for development):
+        # command="uv",
+        # args=["run", "mcp-file-server"]
+    )
     
     print("Starting interactive MCP File Server client...")
     print("Type 'help' for available commands, 'quit' to exit.")

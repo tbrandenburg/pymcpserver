@@ -7,6 +7,14 @@
       },
       "disabled": false,
       "autoApprove": []
+    },
+    "file-server-uv": {
+      "command": "uv",
+      "args": ["run", "mcp-file-server"],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [],
+      "_comment": "Alternative configuration using uv run (recommended for development)"
     }
   }
 }

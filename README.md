@@ -15,7 +15,20 @@ A Model Context Protocol (MCP) server that provides secure file system operation
 
 ## Installation
 
-### From Source
+### Using uv (Recommended)
+
+1. Clone or download this repository
+2. Install dependencies and set up the project:
+
+```bash
+# Install all dependencies including development tools
+uv sync
+
+# Install only production dependencies
+uv sync --no-dev
+```
+
+### From Source (Alternative)
 
 1. Clone or download this repository
 2. Install the package in development mode:
@@ -26,7 +39,16 @@ pip install -e .
 
 ### Development Installation
 
-For development with testing and linting tools:
+For development with testing and linting tools using uv:
+
+```bash
+# Install all dependencies including development tools
+uv sync
+
+# The project is automatically available for development
+```
+
+For development with pip (alternative):
 
 ```bash
 pip install -e ".[dev]"
@@ -41,7 +63,17 @@ pip install -e ".[dev]"
 
 ### Running the Server
 
-#### Command Line
+#### Command Line (with uv)
+
+```bash
+# Run the server using uv
+uv run mcp-file-server
+
+# Or run directly with Python module
+uv run python -m mcp_file_server.main
+```
+
+#### Command Line (traditional)
 
 ```bash
 mcp-file-server
@@ -68,6 +100,20 @@ run_server()
 
 Add to your Claude Desktop configuration file (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
 
+**Using uv (recommended):**
+```json
+{
+  "mcpServers": {
+    "file-server": {
+      "command": "uv",
+      "args": ["run", "mcp-file-server"],
+      "cwd": "/path/to/mcp-file-server"
+    }
+  }
+}
+```
+
+**Traditional approach:**
 ```json
 {
   "mcpServers": {
@@ -83,6 +129,20 @@ Add to your Claude Desktop configuration file (`~/Library/Application Support/Cl
 
 #### Generic MCP Client Configuration
 
+**Using uv (recommended):**
+```json
+{
+  "mcpServers": {
+    "file-operations": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "mcp_file_server.main"],
+      "cwd": "/path/to/mcp-file-server"
+    }
+  }
+}
+```
+
+**Traditional approach:**
 ```json
 {
   "mcpServers": {
@@ -106,7 +166,10 @@ You can test the server using the MCP Inspector tool:
 # Install MCP Inspector
 npm install -g @modelcontextprotocol/inspector
 
-# Run with your server
+# Run with your server (using uv)
+mcp-inspector uv run mcp-file-server
+
+# Run with your server (traditional)
 mcp-inspector mcp-file-server
 ```
 
@@ -275,10 +338,16 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 async def example_usage():
-    # Connect to the MCP server
+    # Connect to the MCP server (using uv)
     server_params = StdioServerParameters(
-        command="mcp-file-server"
+        command="uv",
+        args=["run", "mcp-file-server"]
     )
+    
+    # Alternative: Connect to the MCP server (traditional)
+    # server_params = StdioServerParameters(
+    #     command="mcp-file-server"
+    # )
     
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
@@ -319,9 +388,11 @@ asyncio.run(example_usage())
 
 **Problem**: Server fails to start with import errors
 **Solution**: 
-- Ensure FastMCP is installed: `pip install fastmcp`
+- With uv: Ensure dependencies are installed: `uv sync`
+- With pip: Ensure FastMCP is installed: `pip install fastmcp`
 - Check Python version (3.8+ required)
-- Verify installation: `pip install -e .`
+- With uv: Dependencies are automatically managed
+- With pip: Verify installation: `pip install -e .`
 
 #### Permission Denied Errors
 
@@ -372,6 +443,16 @@ logging.basicConfig(
 
 #### Test Server Manually
 
+**Using uv (recommended):**
+```bash
+# Test server startup
+uv run python -m mcp_file_server.main
+
+# Test with MCP Inspector
+mcp-inspector uv run mcp-file-server
+```
+
+**Traditional approach:**
 ```bash
 # Test server startup
 python -m mcp_file_server.main
@@ -397,6 +478,19 @@ mcp-inspector mcp-file-server
 
 ### Running Tests
 
+**Using uv (recommended):**
+```bash
+# Run all tests
+uv run pytest
+
+# Run with coverage
+uv run pytest --cov=src/mcp_file_server
+
+# Run specific test file
+uv run pytest tests/test_integration.py
+```
+
+**Traditional approach:**
 ```bash
 # Run all tests
 pytest
@@ -410,6 +504,19 @@ pytest tests/test_integration.py
 
 ### Code Formatting
 
+**Using uv (recommended):**
+```bash
+# Format code
+uv run black src/ tests/
+
+# Sort imports
+uv run isort src/ tests/
+
+# Type checking
+uv run mypy src/
+```
+
+**Traditional approach:**
 ```bash
 # Format code
 black src/ tests/

@@ -5,6 +5,15 @@
       "env": {
         "PYTHONPATH": "/path/to/your/mcp-file-server/src"
       }
+    },
+    "file-operations-uv": {
+      "command": "uv",
+      "args": [
+        "run",
+        "mcp-file-server"
+      ],
+      "env": {},
+      "_comment": "Alternative configuration using uv run (recommended for development)"
     }
   }
 }
